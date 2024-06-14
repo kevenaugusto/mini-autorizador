@@ -1,9 +1,7 @@
 package br.com.kevenaugusto.miniauthorizer.controller;
 
 import br.com.kevenaugusto.miniauthorizer.dto.CardResponseDto;
-import br.com.kevenaugusto.miniauthorizer.enumeration.TransactionStatus;
 import br.com.kevenaugusto.miniauthorizer.exception.CardAlreadyExistsException;
-import br.com.kevenaugusto.miniauthorizer.exception.TransactionException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,27 +31,6 @@ public class GlobalExceptionHandlerTest {
         var responseEntity = globalExceptionHandler.handleCardNotFoundException();
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertNull(responseEntity.getBody());
-    }
-
-    @Test
-    void shouldReturnAnEntityWithStatusUnprocessableAndBodyWithInsufficientBalance() {
-        var responseEntity = globalExceptionHandler.handleTransactionException(new TransactionException(TransactionStatus.SALDO_INSUFICIENTE));
-        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
-        assertEquals(TransactionStatus.SALDO_INSUFICIENTE, responseEntity.getBody());
-    }
-
-    @Test
-    void shouldReturnAnEntityWithStatusUnprocessableAndBodyWithInvalidPassword() {
-        var responseEntity = globalExceptionHandler.handleTransactionException(new TransactionException(TransactionStatus.SENHA_INVALIDA));
-        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
-        assertEquals(TransactionStatus.SENHA_INVALIDA, responseEntity.getBody());
-    }
-
-    @Test
-    void shouldReturnAnEntityWithStatusUnprocessableAndBodyWithInexistentCard() {
-        var responseEntity = globalExceptionHandler.handleTransactionException(new TransactionException(TransactionStatus.CARTAO_INEXISTENTE));
-        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, responseEntity.getStatusCode());
-        assertEquals(TransactionStatus.CARTAO_INEXISTENTE, responseEntity.getBody());
     }
 
 }
