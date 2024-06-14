@@ -2,7 +2,7 @@ package br.com.kevenaugusto.miniauthorizer.service;
 
 import br.com.kevenaugusto.miniauthorizer.dto.CardResponseDto;
 import br.com.kevenaugusto.miniauthorizer.dto.InputCardDto;
-import br.com.kevenaugusto.miniauthorizer.exception.CardAlreadyExists;
+import br.com.kevenaugusto.miniauthorizer.exception.CardAlreadyExistsException;
 import br.com.kevenaugusto.miniauthorizer.model.CardModel;
 import br.com.kevenaugusto.miniauthorizer.repository.CardRepository;
 import org.springframework.beans.BeanUtils;
@@ -22,7 +22,7 @@ public class CardService {
     public CardResponseDto createCard(InputCardDto inputCardDto) {
         Optional<CardModel> card0 = cardRepository.findByNumeroCartao(inputCardDto.numeroCartao());
         card0.ifPresent(cardModel -> {
-            throw new CardAlreadyExists(cardModel.getSenha(), cardModel.getNumeroCartao());
+            throw new CardAlreadyExistsException(cardModel.getSenha(), cardModel.getNumeroCartao());
         });
         var cardModel = new CardModel();
         BeanUtils.copyProperties(inputCardDto, cardModel);
