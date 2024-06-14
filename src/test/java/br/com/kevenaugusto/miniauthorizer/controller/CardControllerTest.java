@@ -67,6 +67,42 @@ public class CardControllerTest {
     }
 
     @Test
+    void shouldReturnBadRequestWhenCardNumberIsAlphanumeric() throws Exception {
+        mockMvc
+            .perform(post(ENDPOINT)
+                .with(csrf())
+                .with(httpBasic(USERNAME, PASSWORD))
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(CardBuilder.buildCardWithAlphanumericCardNumber())))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenCardNumberSizeIsLessThanMinimum() throws Exception {
+        mockMvc
+            .perform(post(ENDPOINT)
+                .with(csrf())
+                .with(httpBasic(USERNAME, PASSWORD))
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(CardBuilder.buildCardWithCardNumberLessThanMinimum())))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenCardNumberSizeIsGreaterThanMaximum() throws Exception {
+        mockMvc
+            .perform(post(ENDPOINT)
+                .with(csrf())
+                .with(httpBasic(USERNAME, PASSWORD))
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(CardBuilder.buildCardWithCardNumberGreaterThanMaximum())))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void shouldReturnBadRequestWhenPasswordIsNull() throws Exception {
         mockMvc
             .perform(post(ENDPOINT)
