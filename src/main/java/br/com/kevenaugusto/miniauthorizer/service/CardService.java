@@ -3,6 +3,7 @@ package br.com.kevenaugusto.miniauthorizer.service;
 import br.com.kevenaugusto.miniauthorizer.dto.CardResponseDto;
 import br.com.kevenaugusto.miniauthorizer.dto.InputCardDto;
 import br.com.kevenaugusto.miniauthorizer.exception.CardAlreadyExistsException;
+import br.com.kevenaugusto.miniauthorizer.exception.CardNotFoundException;
 import br.com.kevenaugusto.miniauthorizer.model.CardModel;
 import br.com.kevenaugusto.miniauthorizer.repository.CardRepository;
 import org.springframework.beans.BeanUtils;
@@ -32,7 +33,8 @@ public class CardService {
     }
 
     public BigDecimal getCardBalance(String cardNumber) {
-        return null;
+        var card0 = cardRepository.findByNumeroCartao(cardNumber).orElseThrow(CardNotFoundException::new);
+        return card0.getSaldo();
     }
 
 }
