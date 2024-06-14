@@ -5,6 +5,7 @@ import br.com.kevenaugusto.miniauthorizer.enumeration.TransactionStatus;
 import br.com.kevenaugusto.miniauthorizer.exception.CardAlreadyExistsException;
 import br.com.kevenaugusto.miniauthorizer.exception.CardNotFoundException;
 import br.com.kevenaugusto.miniauthorizer.exception.TransactionException;
+import br.com.kevenaugusto.miniauthorizer.singleton.TransactionMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -34,6 +35,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TransactionException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ResponseEntity<TransactionStatus> handleTransactionException(TransactionException error) {
+        var transactionMap = TransactionMap.getInstance();
+        transactionMap.unlockCard(error.getCardNumber());
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error.getStatus());
     }
 
