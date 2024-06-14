@@ -1,8 +1,10 @@
 package br.com.kevenaugusto.miniauthorizer.controller;
 
 import br.com.kevenaugusto.miniauthorizer.dto.CardResponseDto;
+import br.com.kevenaugusto.miniauthorizer.enumeration.TransactionStatus;
 import br.com.kevenaugusto.miniauthorizer.exception.CardAlreadyExistsException;
 import br.com.kevenaugusto.miniauthorizer.exception.CardNotFoundException;
+import br.com.kevenaugusto.miniauthorizer.exception.TransactionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -27,6 +29,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Object> handleCardNotFoundException() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    @ExceptionHandler(TransactionException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ResponseEntity<TransactionStatus> handleTransactionException(TransactionException error) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error.getStatus());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
